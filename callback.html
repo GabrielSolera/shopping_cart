@@ -1,23 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Zoho OAuth Callback</title>
+  <meta charset="UTF-8" />
+  <title>Callback Zoho</title>
 </head>
 <body>
-  <h2>Redireccionado desde Zoho</h2>
-  <p id="output" style="font-family: monospace; font-size: 1.2em;"></p>
+  <h2>Zoho OAuth - Callback</h2>
+  <pre id="result">Procesando...</pre>
 
   <script>
     const params = new URLSearchParams(window.location.search);
     const code = params.get("code");
-    const output = document.getElementById("output");
+
+    const clientId = "1000.91OKIP58EORRMDO1N15E9ZY1MZ6LTO";
+    const clientSecret = "a323bc477e46b206971cc708bb1a44a0fe21623d9e";
+    const redirectUri = "https://gabrielsolera.github.io/shopping_cart/callback.html";
 
     if (code) {
-      output.textContent = "Código de autorización: " + code;
-      console.log("Authorization code:", code);
+      const data = new URLSearchParams();
+      data.append("grant_type", "authorization_code");
+      data.append("client_id", clientId);
+      data.append("client_secret", clientSecret);
+      data.append("redirect_uri", redirectUri);
+      data.append("code", code);
+
+      fetch("https://accounts.zoho.com/oauth/v2/token", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: data.toString()
+      })
+      .then(res => res.json())
+      .then(tokenData => {
+        document.getElementById("result").textContent = JSON.stringify(tokenData, null, 2);
+        localStorage.setItem("zoho_access_token", tokenData.access_token);
+        // Aquí podrías redirigir a otra página si lo deseas:
+        // window.location.href = "dashboard.html";
+      })
+      .catch(err => {
+        document.getElementById("result").textContent = "Error al obtener token: " + err;
+      });
     } else {
-      output.textContent = "No se recibió ningún código en la URL.";
+      document.getElementById("result").textContent = "No se recibió ningún código de autorización.";
     }
   </script>
 </body>
