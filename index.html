@@ -1,23 +1,22 @@
-<!-- index.html -->
+<!-- index.html actualizado -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Login with Zoho</title>
+  <title>Login with Zoho Inventory</title>
 </head>
 <body>
-  <h2>Iniciar sesión con Zoho</h2>
+  <h2>Iniciar sesión con Zoho Inventory</h2>
   <button onclick="loginWithZoho()">Login with Zoho</button>
 
   <script>
     function loginWithZoho() {
       const clientId = "1000.91OKIP58EORRMDO1N15E9ZY1MZ6LTO";
       const redirectUri = "https://gabrielsolera.github.io/shopping_cart/callback.html";
-      const scope = "AaaServer.profile.Read";
+      const scope = "ZohoInventory.fullaccess.all";
       const responseType = "code";
 
       const authUrl = `https://accounts.zoho.com/oauth/v2/auth?scope=${scope}&client_id=${clientId}&response_type=${responseType}&access_type=offline&redirect_uri=${redirectUri}`;
-
       window.location.href = authUrl;
     }
   </script>
