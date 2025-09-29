@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Callback Zoho</title>
+  <title>Zoho OAuth - Callback</title>
 </head>
 <body>
   <h2>Zoho OAuth - Callback</h2>
@@ -12,36 +12,37 @@
     const params = new URLSearchParams(window.location.search);
     const code = params.get("code");
 
-    const clientId = "1000.91OKIP58EORRMDO1N15E9ZY1MZ6LTO";
-    const clientSecret = "a323bc477e46b206971cc708bb1a44a0fe21623d9e";
-    const redirectUri = "https://gabrielsolera.github.io/shopping_cart/callback.html";
-
-    if (code) {
-      const data = new URLSearchParams();
-      data.append("grant_type", "authorization_code");
-      data.append("client_id", clientId);
-      data.append("client_secret", clientSecret);
-      data.append("redirect_uri", redirectUri);
-      data.append("code", code);
-
-      fetch("https://accounts.zoho.com/oauth/v2/token", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: data.toString()
-      })
-      .then(res => res.json())
-      .then(tokenData => {
-        localStorage.setItem("zoho_access_token", tokenData.access_token);
-        localStorage.setItem("zoho_refresh_token", tokenData.refresh_token);
-        localStorage.setItem("zoho_token_expiry", Date.now() + tokenData.expires_in * 1000); // en ms
-        document.getElementById("result").textContent = "Token obtenido, redirigiendo...";
-        setTimeout(() => window.location.href = "dashboard.html", 1000);
-      })
-      .catch(err => {
-        document.getElementById("result").textContent = "Error al obtener token: " + err;
-      });
+    if (!code) {
+      document.getElementById("result").textContent = "❌ No se recibió ningún código de autorización.";
     } else {
-      document.getElementById("result").textContent = "No se recibió ningún código de autorización.";
+      const scriptUrl = "https://script.google.com/macros/s/AKfycbwg46teFrUvY1r5ENqqRSeGtkRqJsDnASxTUGJQRbAUYQJ0yZ6jJ0zYoob6gn2VY_PEsA/exec";
+      const callbackUrl = `${scriptUrl}?code=${code}`;
+
+      fetch(callbackUrl)
+        .then(res => res.text())
+        .then(text => {
+          document.getElementById("result").textContent = text;
+
+          // Extraer tokens del texto de respuesta
+          const accessMatch = text.match(/Access Token: ([\w\d\-_.]+)/);
+          const refreshMatch = text.match(/Refresh Token: ([\w\d\-_.]+)/);
+
+          if (accessMatch && refreshMatch) {
+            const accessToken = accessMatch[1];
+            const refreshToken = refreshMatch[1];
+            const now = Date.now();
+
+            localStorage.setItem("zoho_access_token", accessToken);
+            localStorage.setItem("zoho_refresh_token", refreshToken);
+            localStorage.setItem("zoho_token_expiry", now + 3600 * 1000); // 1h vencimiento estimado
+
+            // Redirigir al dashboard (opcional)
+            // window.location.href = "dashboard.html";
+          }
+        })
+        .catch(err => {
+          document.getElementById("result").textContent = "❌ Error al comunicarse con Apps Script: " + err;
+        });
     }
   </script>
 </body>
