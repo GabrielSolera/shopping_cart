@@ -6,41 +6,20 @@
 </head>
 <body>
   <h2>Iniciar sesión con Zoho Inventory</h2>
-  <button onclick="loginWithZoho()">Login with Zoho</button>
+  <button id="zohoLoginBtn">Login with Zoho</button>
 
   <script>
-    function loginWithZoho() {
-      const clientId = "1000.91OKIP58EORRMDO1N15E9ZY1MZ6LTO";
-      const redirectUri = "<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <title>Login con Zoho Inventory</title>
-</head>
-<body>
-  <h2>Iniciar sesión con Zoho Inventory</h2>
-  <button onclick="loginWithZoho()">Login with Zoho</button>
-
-  <script>
-    function loginWithZoho() {
+    document.getElementById("zohoLoginBtn").addEventListener("click", function() {
       const clientId = "1000.91OKIP58EORRMDO1N15E9ZY1MZ6LTO";
       const redirectUri = "https://script.google.com/macros/s/AKfycbwg46teFrUvY1r5ENqqRSeGtkRqJsDnASxTUGJQRbAUYQJ0yZ6jJ0zYoob6gn2VY_PEsA/exec";
-      const scope = "ZohoInventory.items.READ";
-      const responseType = "code";
-
-      const authUrl = `https://accounts.zoho.com/oauth/v2/auth?scope=${scope}&client_id=${clientId}&response_type=${responseType}&access_type=offline&redirect_uri=${encodeURIComponent(redirectUri)}`;
-      window.location.href = authUrl;
-    }
-  </script>
-</body>
-</html>";
       const scope = "ZohoInventory.fullaccess.all";
       const responseType = "code";
+      const accessType = "offline";
 
-      const authUrl = `https://accounts.zoho.com/oauth/v2/auth?scope=${scope}&client_id=${clientId}&response_type=${responseType}&access_type=offline&redirect_uri=${encodeURIComponent(redirectUri)}`;
+      const authUrl = `https://accounts.zoho.com/oauth/v2/auth?scope=${scope}&client_id=${clientId}&response_type=${responseType}&access_type=${accessType}&redirect_uri=${encodeURIComponent(redirectUri)}`;
 
       window.location.href = authUrl;
-    }
+    });
   </script>
 </body>
 </html>
