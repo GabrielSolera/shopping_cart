@@ -1,43 +1,50 @@
+<!-- callback.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <title>Callback Zoho</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 30px;
-      background: #fafafa;
-      color: #333;
-    }
-    h2 {
-      color: #3d0c4e;
-    }
-    pre {
-      background: #f4f4f4;
-      padding: 15px;
-      border: 1px solid #ddd;
-      font-size: 16px;
-      word-break: break-all;
-    }
-  </style>
 </head>
 <body>
   <h2>Zoho OAuth - Callback</h2>
-  <p>Este es tu código de autorización. Cópialo y úsalo en Postman:</p>
   <pre id="result">Procesando...</pre>
 
   <script>
     const params = new URLSearchParams(window.location.search);
     const code = params.get("code");
-    const output = document.getElementById("result");
+
+    const clientId = "1000.91OKIP58EORRMDO1N15E9ZY1MZ6LTO";
+    const clientSecret = "a323bc477e46b206971cc708bb1a44a0fe21623d9e";
+    const redirectUri = "https://gabrielsolera.github.io/shopping_cart/callback.html";
 
     if (code) {
-      output.textContent = code;
+      const data = new URLSearchParams();
+      data.append("grant_type", "authorization_code");
+      data.append("client_id", clientId);
+      data.append("client_secret", clientSecret);
+      data.append("redirect_uri", redirectUri);
+      data.append("code", code);
+
+      fetch("https://accounts.zoho.com/oauth/v2/token", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: data.toString()
+      })
+      .then(res => res.json())
+      .then(tokenData => {
+        if (tokenData.access_token) {
+          localStorage.setItem("zoho_access_token", tokenData.access_token);
+          window.location.href = "dashboard.html"; // Redirige
+        } else {
+          document.getElementById("result").textContent = "Error: " + JSON.stringify(tokenData, null, 2);
+        }
+      })
+      .catch(err => {
+        document.getElementById("result").textContent = "Error al obtener token: " + err;
+      });
     } else {
-      output.textContent = "⚠️ No se recibió ningún código de autorización en la URL.";
+      document.getElementById("result").textContent = "No se recibió ningún código de autorización.";
     }
   </script>
 </body>
 </html>
-
