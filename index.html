@@ -1,12 +1,13 @@
+<!-- index.html -->
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Login con Zoho</title>
+  <meta charset="UTF-8">
+  <title>Login with Zoho</title>
 </head>
 <body>
-  <h1>Login con Zoho</h1>
-  <button onclick="loginWithZoho()">Conectar con Zoho</button>
+  <h2>Iniciar sesión con Zoho</h2>
+  <button onclick="loginWithZoho()">Login with Zoho</button>
 
   <script>
     function loginWithZoho() {
@@ -15,8 +16,9 @@
       const scope = "AaaServer.profile.Read";
       const responseType = "code";
 
-      const url = `https://accounts.zoho.com/oauth/v2/auth?scope=${scope}&client_id=${clientId}&response_type=${responseType}&access_type=offline&redirect_uri=${encodeURIComponent(redirectUri)}`;
-      window.location.href = url;
+      const authUrl = `https://accounts.zoho.com/oauth/v2/auth?scope=${scope}&client_id=${clientId}&response_type=${responseType}&access_type=offline&redirect_uri=${redirectUri}`;
+
+      window.location.href = authUrl;
     }
   </script>
 </body>
