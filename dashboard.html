@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dashboard - Items Zoho Inventory</title>
+</head>
+<body>
+  <h2>Items de Zoho Inventory</h2>
+  <pre id="result">Cargando...</pre>
+
+  <script>
+    const accessToken = localStorage.getItem("zoho_access_token");
+    const orgId = "873616335"; // Tu Organization ID de Zoho
+
+    if (!accessToken) {
+      document.getElementById("result").textContent = "Token no encontrado. Por favor inicia sesión primero.";
+    } else {
+      fetch("https://www.zohoapis.com/inventory/v1/items", {
+        method: "GET",
+        headers: {
+          "Authorization": `Zoho-oauthtoken ${accessToken}`,
+          "orgId": orgId
+        }
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("result").textContent = JSON.stringify(data, null, 2);
+      })
+      .catch(error => {
+        document.getElementById("result").textContent = "Error al obtener items: " + error;
+      });
+    }
+  </script>
+</body>
+</html>
