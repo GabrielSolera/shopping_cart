@@ -1,4 +1,3 @@
-<!-- callback.html actualizado -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -32,9 +31,11 @@
       })
       .then(res => res.json())
       .then(tokenData => {
-        document.getElementById("result").textContent = JSON.stringify(tokenData, null, 2);
         localStorage.setItem("zoho_access_token", tokenData.access_token);
-        window.location.href = "dashboard.html";
+        localStorage.setItem("zoho_refresh_token", tokenData.refresh_token);
+        localStorage.setItem("zoho_token_expiry", Date.now() + tokenData.expires_in * 1000); // en ms
+        document.getElementById("result").textContent = "Token obtenido, redirigiendo...";
+        setTimeout(() => window.location.href = "dashboard.html", 1000);
       })
       .catch(err => {
         document.getElementById("result").textContent = "Error al obtener token: " + err;
