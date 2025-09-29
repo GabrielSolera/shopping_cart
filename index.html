@@ -1,9 +1,8 @@
-<!-- index.html actualizado -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Login with Zoho Inventory</title>
+  <meta charset="UTF-8" />
+  <title>Login con Zoho Inventory</title>
 </head>
 <body>
   <h2>Iniciar sesión con Zoho Inventory</h2>
@@ -12,11 +11,11 @@
   <script>
     function loginWithZoho() {
       const clientId = "1000.91OKIP58EORRMDO1N15E9ZY1MZ6LTO";
-      const redirectUri = "https://script.google.com/macros/d/PASTE_YOUR_DEPLOYMENT_ID_HERE/usercallback";
+      const redirectUri = "https://script.google.com/macros/s/AKfycbx5hajbQYgolmX3GH5yYgW2-DKxYBYDg977_9DC03jF8eGaDXMatIFC_TR2iN0uNGExuw/exec";
       const scope = "ZohoInventory.fullaccess.all";
       const responseType = "code";
 
-      const authUrl = `https://accounts.zoho.com/oauth/v2/auth?scope=${scope}&client_id=${clientId}&response_type=${responseType}&access_type=offline&redirect_uri=${redirectUri}`;
+      const authUrl = `https://accounts.zoho.com/oauth/v2/auth?scope=${scope}&client_id=${clientId}&response_type=${responseType}&access_type=offline&redirect_uri=${encodeURIComponent(redirectUri)}`;
       window.location.href = authUrl;
     }
   </script>
